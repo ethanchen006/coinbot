@@ -8,17 +8,56 @@ import {
   ButtonStyleTypes,
 } from 'discord-interactions';
 import { VerifyDiscordRequest, DiscordRequest } from './utils.js';
-//import { getShuffledOptions, getResult } from './game.js';
+import { Sequelize } from '@sequelize/core';
 
-// Create an express app
+import { Client, codeBlock, Collection, Events, GatewayIntentBits } from 'discord.js';
+import { Users, CurrencyShop } from './dbObjects.js';
+
+const client = new Client({ intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildMessages] });
+const currency = new Collection();
+
+async function addBalance(id, amount) {
+	const user = currency.get(id);
+
+	if (user) {
+		user.balance += Number(amount);
+		return user.save();
+	}
+
+	const newUser = await Users.create({ user_id: id, balance: amount });
+	currency.set(id, newUser);
+
+	return newUser;
+}
+
+function getBalance(id) {
+	const user = currency.get(id);
+	return user ? user.balance : 0;
+}
+
+client.once(Events.ClientReady, readyClient => {
+	console.log(`Ready! Logged in as ${readyClient.user.tag}`);
+});
+
+client.on(Events.MessageCreate, async message => {
+	if (message.author.bot) return;
+	addBalance(message.author.id, 1);
+});
+
+client.on(Events.InteractionCreate, async interaction => {
+	if (!interaction.isChatInputCommand()) return;
+
+	const { commandName } = interaction;
+	// ...
+});
+
+client.login('your-token-goes-here');
+
+
 const app = express();
-// Get port, or default to 3000
 const PORT = process.env.PORT || 3000;
-// Parse request body and verifies incoming requests using discord-interactions package
 app.use(express.json({ verify: VerifyDiscordRequest(process.env.PUBLIC_KEY) }));
 
-// Store for in-progress games. In production, you'd want to use a DB
-const activeGames = {};
 
 /**
  * Interactions endpoint URL where Discord will send HTTP requests
@@ -34,10 +73,7 @@ app.post('/interactions', async function (req, res) {
     return res.send({ type: InteractionResponseType.PONG });
   }
 
-  /**
-   * Handle slash command requests
-   * See https://discord.com/developers/docs/interactions/application-commands#slash-commands
-   */
+
   if (type === InteractionType.APPLICATION_COMMAND) {
     const { name } = data;
 
@@ -48,7 +84,7 @@ app.post('/interactions', async function (req, res) {
         type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
         data: {
           // Fetches a random emoji to send from a helper function
-          content: `<@${userId}>` + 'your balance is ',
+          content: `<@${userId}> has ${getBalance(userId)}💰`,
         },
       });
     }
