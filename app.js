@@ -50,7 +50,7 @@ client.on(Events.InteractionCreate, async interaction => {
 	// ...
 });
 
-client.login('MTIwOTY4NTA3OTQ1NTA0NzcwMg.G5eOAM.LmDBNq0c76-bJLrgGj3CURLFjyB6qVeKEAXWQA');
+
 
 
 const app = express();
