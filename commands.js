@@ -25,6 +25,8 @@ const BALANCE_COMMAND = {
   type: 1,
 }
 
+
+
 const ALL_COMMANDS = [CHALLENGE_COMMAND, BALANCE_COMMAND];
 
 InstallGlobalCommands(process.env.APP_ID, ALL_COMMANDS);

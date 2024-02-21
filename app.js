@@ -8,11 +8,10 @@ import {
   ButtonStyleTypes,
 } from 'discord-interactions';
 import { VerifyDiscordRequest, DiscordRequest } from './utils.js';
-import { Sequelize } from '@sequelize/core';
+import Sequelize from 'sequelize';
 
 import { Client, codeBlock, Collection, Events, GatewayIntentBits } from 'discord.js';
 import { Users, CurrencyShop } from './dbObjects.js';
-
 const client = new Client({ intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildMessages] });
 const currency = new Collection();
 
@@ -51,7 +50,7 @@ client.on(Events.InteractionCreate, async interaction => {
 	// ...
 });
 
-client.login('your-token-goes-here');
+client.login('MTIwOTY4NTA3OTQ1NTA0NzcwMg.G5eOAM.LmDBNq0c76-bJLrgGj3CURLFjyB6qVeKEAXWQA');
 
 
 const app = express();

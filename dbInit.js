@@ -1,5 +1,4 @@
-
-import { Sequelize } from '@sequelize/core';
+import { DataTypes, Sequelize } from 'sequelize';
 
 const sequelize = new Sequelize('database', 'username', 'password', {
 	host: 'localhost',
@@ -8,9 +7,12 @@ const sequelize = new Sequelize('database', 'username', 'password', {
 	storage: 'database.sqlite',
 });
 
-const CurrencyShop = require('./models/CurrencyShop.js')(sequelize, Sequelize.DataTypes);
-require('./models/Users.js')(sequelize, Sequelize.DataTypes);
-require('./models/UserItems.js')(sequelize, Sequelize.DataTypes);
+import UsersModel from './models/Users.js';
+import CurrencyShopModel from './models/CurrencyShop.js';
+import UserItemsModel from './models/UserItems.js';
+const Users = UsersModel(sequelize, DataTypes);
+const CurrencyShop = CurrencyShopModel(sequelize, DataTypes);
+const UserItems = UserItemsModel(sequelize, DataTypes);
 
 const force = process.argv.includes('--force') || process.argv.includes('-f');
 
