@@ -9,7 +9,7 @@ import {
 } from 'discord-interactions';
 import { VerifyDiscordRequest, DiscordRequest } from './utils.js';
 import Sequelize from 'sequelize';
-
+//test uygasgfiygsdyfiksajgdvhcbvz
 import { Client, codeBlock, Collection, Events, GatewayIntentBits } from 'discord.js';
 import { Users, CurrencyShop } from './dbObjects.js';
 const client = new Client({ intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildMessages] });
